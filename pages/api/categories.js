@@ -1,14 +1,24 @@
 import mongoose from "mongoose";
 import { Category } from "../../models/Category";
 import { mongooseConnect } from "../../lib/mongoose";
+import { authOption, isAdminRequest } from "./auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 export default async function handle(req, res) {
   const { method } = req;
   await mongooseConnect();
+  await isAdminRequest(req, res);
 
   if (method === "GET") {
-    const categories = await Category.find({}).populate("parent");
-    res.json(categories);
+    if (req.query._id) {
+      const getCatByID = await Category.findById(req.query._id).populate(
+        "parent"
+      );
+      res.json(getCatByID);
+    } else {
+      const categories = await Category.find({}).populate("parent");
+      res.json(categories);
+    }
   }
 
   if (method === "POST") {

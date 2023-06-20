@@ -18,6 +18,9 @@ const productSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: "Category",
   },
+  properties: {
+    type: Object,
+  },
 });
 
 export default mongoose.models.Product ||
