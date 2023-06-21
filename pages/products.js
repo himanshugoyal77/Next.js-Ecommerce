@@ -23,8 +23,7 @@ export default function Products() {
         <thead>
           <tr>
             <td>Product name</td>
-            <td>Description</td>
-            <td>Price</td>
+
             <td></td>
           </tr>
         </thead>
@@ -32,8 +31,7 @@ export default function Products() {
           {products.map((product) => (
             <tr key={product._id}>
               <td>{product.title}</td>
-              <td>{product.description}</td>
-              <td>{product.price}</td>
+
               <td>
                 <Link href={`/products/edit/${product._id}`}>
                   <svg
