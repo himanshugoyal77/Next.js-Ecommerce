@@ -10,8 +10,15 @@ export default async function handle(req, res) {
   await isAdminRequest(req, res);
 
   if (method === "POST") {
-    const { title, description, price, images, category, properties } =
-      req.body;
+    const {
+      title,
+      description,
+      price,
+      images,
+      category,
+      properties,
+      netWorkImages,
+    } = req.body;
     const productDoc = new Product({
       title,
       description,
@@ -19,6 +26,7 @@ export default async function handle(req, res) {
       images,
       category,
       properties,
+      netWorkImages,
     });
     await productDoc.save();
     res.status(200).json(productDoc);
@@ -36,11 +44,19 @@ export default async function handle(req, res) {
   }
 
   if (method === "PUT") {
-    const { title, description, price, images, category, _id, properties } =
-      req.body;
+    const {
+      title,
+      description,
+      price,
+      images,
+      category,
+      _id,
+      properties,
+      netWorkImages,
+    } = req.body;
     await Product.findByIdAndUpdate(
       { _id },
-      { title, description, price, images, category, properties }
+      { title, description, price, images, category, properties, netWorkImages }
     );
 
     res.status(200).json({ message: "ok" });

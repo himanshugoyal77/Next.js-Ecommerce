@@ -14,6 +14,7 @@ export default function ProductForm({
   images: existingImages,
   category: existingCategory,
   properties: existingProperties,
+  netWorkImages: existingNetWorkImages,
 }) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
@@ -24,12 +25,27 @@ export default function ProductForm({
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [properties, setProperties] = useState(existingProperties || {});
+  const [netWorkImages, setNetWorkImages] = useState(
+    "" || existingNetWorkImages
+  ); // for images from network
 
+  if (netWorkImages) {
+    const im = netWorkImages[0].split(",");
+    console.log("netWorkImages", im);
+  }
   const router = useRouter();
 
   async function saveProduct(e) {
     e.preventDefault();
-    const data = { title, description, price, images, category, properties };
+    const data = {
+      title,
+      description,
+      price,
+      images,
+      category,
+      properties,
+      netWorkImages: netWorkImages.split(","),
+    };
     if (_id) {
       // update
       await axios.put("/api/products", { ...data, _id });
@@ -83,8 +99,6 @@ export default function ProductForm({
       catInfo = parentCat;
     }
   }
-
-  console.log("properties", properties);
 
   function setProductProp(name, value) {
     setProperties((oldProperties) => {
@@ -170,6 +184,12 @@ export default function ProductForm({
         </label>
         {/* {!images?.length && <div className="">No photos in this product</div>} */}
       </div>
+      <label htmlFor="">Network Images</label>
+      <textarea
+        placeholder="Enter comma seperated Image urls"
+        onChange={(e) => setNetWorkImages(e.target.value)}
+        value={netWorkImages}
+      />
       <label htmlFor="">Description</label>
       <textarea
         placeholder="description"
