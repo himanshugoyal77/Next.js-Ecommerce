@@ -32,6 +32,11 @@ function CartContextProvider({ children }) {
       }
     });
   }
+
+  const clearCart = () => {
+    localStorage.clear();
+    setCartProducts([]);
+  };
   return (
     <CartContext.Provider
       value={{
@@ -39,6 +44,7 @@ function CartContextProvider({ children }) {
         setCartProducts,
         addProductToCart,
         renoveProductFromCart,
+        clearCart,
       }}
     >
       {children}

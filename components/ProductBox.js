@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PrimaryBtn from "./PrimaryBtn";
 import CartIcon from "./icons/CartIcon";
 import { CartContext } from "./CartContext";
+import Link from "next/link";
 
 const Box = styled.div`
   background-color: #fff;
@@ -41,10 +42,19 @@ const Price = styled.span`
   font-size: 1.5rem;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #000;
+`;
+
 function ProductBox({ _id, title, description, price, images, netWorkImages }) {
   const { addProductToCart } = useContext(CartContext);
+  const add = (event, _id) => {
+    event.stopPropagation();
+    addProductToCart(_id);
+  };
   return (
-    <div className="">
+    <StyledLink href={`/products/${_id}`}>
       <Box>
         <img src={netWorkImages[0] || netWorkImages[1]} alt="" />
       </Box>
@@ -52,12 +62,12 @@ function ProductBox({ _id, title, description, price, images, netWorkImages }) {
         <Title>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <PrimaryBtn primary={1} outline onClick={() => addProductToCart(_id)}>
+          <PrimaryBtn primary={1} outline onClick={(e) => add(e, _id)}>
             Add to cart
           </PrimaryBtn>
         </PriceRow>
       </ProductInfoBox>
-    </div>
+    </StyledLink>
   );
 }
 

@@ -53,7 +53,7 @@ const QunatityLabel = styled.span`
 `;
 
 function CartPage() {
-  const { cartProducts, addProductToCart, renoveProductFromCart } =
+  const { cartProducts, addProductToCart, renoveProductFromCart, clearCart } =
     useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [paymentInfo, setPaymentInfo] = useState({
@@ -73,6 +73,13 @@ function CartPage() {
         setProducts(res.data);
       });
   }, [cartProducts]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window?.location.href.includes("success")) {
+      clearCart();
+    }
+  }, []);
 
   const handleIncrease = (id) => {
     addProductToCart(id);
