@@ -9,10 +9,16 @@ import Table from "../components/Table";
 import Input from "../components/Input";
 
 const ColumnWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 40px;
-  margin-top: 40px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  @media screen and (min-width: 768px) {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 40px;
+    margin-top: 40px;
+  }
 `;
 
 const ProductsInfoCell = styled.td`
@@ -22,7 +28,7 @@ const ProductsInfoCell = styled.td`
 const Box = styled.div`
   background-color: #fff;
   border-radius: 10px;
-  padding: 30px;
+  padding: 20px 30px 30px;
 `;
 
 const ProductImageBox = styled.div`
@@ -50,6 +56,24 @@ const CityHolder = styled.div`
 
 const QunatityLabel = styled.span`
   padding: 0 3px;
+`;
+
+const QunatityBtn = styled.button`
+  border: none;
+  color: #000;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+const StyledImage = styled.img`
+  display: block;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 80px;
+  max-height: 80px;
+  padding: 10px;
 `;
 
 function CartPage() {
@@ -130,7 +154,12 @@ function CartPage() {
       <Center>
         <ColumnWrapper>
           <Box>
-            {!cartProducts.length && <div>Your cart is empty</div>}
+            {!cartProducts.length && (
+              <StyledImage
+                src={"https://hsnbazar.com/images/empty-cart.png"}
+                alt=""
+              />
+            )}
             {products.length > 0 && (
               <>
                 <h2>Cart</h2>
@@ -153,22 +182,22 @@ function CartPage() {
                             {product.title}
                           </ProductsInfoCell>
                           <td>
-                            <PrimaryBtn
+                            <QunatityBtn
                               onClick={() => handleDecrease(product._id)}
                             >
                               -
-                            </PrimaryBtn>
+                            </QunatityBtn>
                             <QunatityLabel>
                               {
                                 cartProducts.filter((id) => id === product._id)
                                   .length
                               }
                             </QunatityLabel>
-                            <PrimaryBtn
+                            <QunatityBtn
                               onClick={() => handleIncrease(product._id)}
                             >
                               +
-                            </PrimaryBtn>
+                            </QunatityBtn>
                           </td>
                           <td>
                             $
@@ -181,7 +210,14 @@ function CartPage() {
                     <tr>
                       <td></td>
                       <td></td>
-                      <td>${total}</td>
+                      <td
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "1.2rem",
+                        }}
+                      >
+                        ${total}
+                      </td>
                     </tr>
                   </tbody>
                 </Table>

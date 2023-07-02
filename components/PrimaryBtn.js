@@ -72,6 +72,7 @@ export const buttonStyle = css`
       text-size: 1.2rem;
       padding: 10px 20px;
     `}
+    
 `;
 
 const StyledBtn = styled.button`

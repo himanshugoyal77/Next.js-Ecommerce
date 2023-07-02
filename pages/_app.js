@@ -3,7 +3,7 @@ import "../styles/globals.css";
 import CartContextProvider from "../components/CartContext";
 
 const GlobalStyles = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
  body {
     background-color: #eee;
     margin: 0;
