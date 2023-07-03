@@ -52,6 +52,7 @@ function PorductImages({ images }) {
         {images.map((image) => {
           return (
             <ImageButton
+              key={image}
               active={activeImage === image ? true : false}
               onClick={() => setActiveImage(image)}
             >
