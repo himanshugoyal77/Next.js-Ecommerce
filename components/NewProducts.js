@@ -13,12 +13,18 @@ const Title = styled.h1`
   }
 `;
 
+const StyledDiv = styled.div`
+  margin-bottom: 20px;
+`;
+
 function NewProducts({ newProducts }) {
   return (
-    <Center>
-      <Title>New Products</Title>
-      <ProductsGrid products={newProducts} />
-    </Center>
+    <StyledDiv>
+      <Center>
+        <Title>New Products</Title>
+        <ProductsGrid products={newProducts} />
+      </Center>
+    </StyledDiv>
   );
 }
 

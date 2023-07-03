@@ -22,7 +22,10 @@ const ColumnWrapper = styled.div`
 `;
 
 const ProductsInfoCell = styled.td`
+  max-width: 100px;
   padding: 10px 0;
+  text-align: left;
+  overflow: hidden;
 `;
 
 const Box = styled.div`

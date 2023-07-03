@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Center from "../../components/Center";
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
@@ -9,10 +9,15 @@ import Product from "../../models/Products";
 import PorductImages from "../../components/PorductImages";
 import PrimaryBtn from "../../components/PrimaryBtn";
 import { CartContext } from "../../components/CartContext";
+import Link from "next/link";
+import SimilarProducts from "../../components/SimilarProducts";
 
 const Title = styled.h1`
   font-size: 1.4em;
   font-weight: bold;
+  @media screen and (min-width: 768px) {
+    font-size: 2em;
+  }
 `;
 
 const ColumnWrapper = styled.div`
@@ -45,6 +50,16 @@ const PriceBox = styled.div`
 
 const Price = styled.span``;
 
+const PTag = styled.p`
+  textalign: star;
+  color: #777;
+  fontsize: 0.9rem;
+  @media screen and (min-width: 768px) {
+    fontsize: 1.1rem;
+    color: #000;
+  }
+`;
+
 const AddToCartBtn = styled.button`
   height: 34px;
   width: 120px;
@@ -56,9 +71,70 @@ const AddToCartBtn = styled.button`
   background-color: black;
 `;
 
+const QunatityLabel = styled.span`
+  padding: 0 3px;
+`;
+
+const QunatityBox = styled.div`
+  margin: 15px 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+  color: #000;
+`;
+
+const QunatityBtn = styled.button`
+  border: none;
+  color: #000;
+  background-color: #fff;
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #fff;
+`;
+
+const DetailsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
 function SingleProductPage({ product }) {
-  console.log(product);
-  const { addProductToCart } = useContext(CartContext);
+  const { cartProducts, addProductToCart, renoveProductFromCart } =
+    useContext(CartContext);
+  const [products, setProducts] = useState([]);
+  const handleIncrease = (id) => {
+    addProductToCart(id);
+  };
+
+  const handleDecrease = (id) => {
+    renoveProductFromCart(id);
+  };
+
+  let total = 0;
+  cartProducts.forEach((id) => {
+    if (id === product._id) total += product.price;
+  });
+  console.log(total);
+
+  useEffect(() => {
+    axios
+      .post("/api/cart", {
+        ids: cartProducts,
+      })
+      .then((res) => {
+        setProducts(res.data);
+      });
+  }, [cartProducts]);
+  console.log(cartProducts);
   return (
     <>
       <Header />
@@ -67,27 +143,37 @@ function SingleProductPage({ product }) {
           <WhiteBox>
             <PorductImages images={product.netWorkImages} />
           </WhiteBox>
-          <div className="">
+          <DetailsWrapper>
             <Title>{product.title}</Title>
-            <p
-              style={{
-                textAlign: "start",
-                color: "#777",
-                fontSize: "0.9rem",
-              }}
-            >
+            <PTag>
               {product.description.length > 200
                 ? product.description.slice(0, 200) + "..."
                 : product.description}
-            </p>
+            </PTag>
+            <QunatityBox className="">
+              <QunatityBtn onClick={() => handleDecrease(product._id)}>
+                -
+              </QunatityBtn>
+              <QunatityLabel>
+                {cartProducts.filter((id) => id === product._id).length}
+              </QunatityLabel>
+              <QunatityBtn onClick={() => handleIncrease(product._id)}>
+                +
+              </QunatityBtn>
+            </QunatityBox>
             <PriceBox>
-              <Price>${product.price}</Price>
+              <Price>
+                {cartProducts.filter((id) => id === product._id).length > 0
+                  ? `\$${total}`
+                  : `\$${product.price}`}
+              </Price>
               <AddToCartBtn onClick={() => addProductToCart(product._id)}>
-                Add to cart
+                <StyledLink href="/cart">BUY NOW</StyledLink>
               </AddToCartBtn>
             </PriceBox>
-          </div>
+          </DetailsWrapper>
         </ColumnWrapper>
+        <SimilarProducts productCategory={product.category} />
       </Center>
     </>
   );
